@@ -1,0 +1,3 @@
+#!/bin/sh
+
+${ALCHEMY_BIN}/infer -i binomial.mln -e empty.db -r binomial.result -q Heads

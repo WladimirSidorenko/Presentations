@@ -1,0 +1,3 @@
+#!/bin/sh
+
+${ALCHEMY_BIN}/learnwts -i multinomial.mln -o learned.mln -t biased-die.db -ne Outcome -noAddUnitClauses
