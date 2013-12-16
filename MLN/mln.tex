@@ -326,6 +326,28 @@ Inference:\\
   infer -i multinomial.mln -e biased-die.db -r multinomial.result -q Outcome}
 \end{frame}
 
+
+\subsection{Social Network}
+\begin{frame}{\insertsubsection}
+MLN:\\
+\texttt{\small
+Buys(customer)\\
+Trusts(customer, customer)\\
+MarketTo(customer)\\
+0.6 Buys(x1) \textasciicircum{} Trusts(x2, x1) => Buys(x2)\\
+...}\\
+\vspace{0.5cm}
+DB:\\
+\texttt{\small
+Trusts(1,2)\\
+Trusts(2,1)\\
+...}\\
+\vspace{0.5cm}
+Inference:\\
+\texttt{\small
+  infer -i marketing.mln -e trust.db -r marketing.result -q MarketTo -ow Buys -decision}
+\end{frame}
+
 \section{Literature}
 \begin{frame}{\insertsection}
   \bibliography{bibliography}

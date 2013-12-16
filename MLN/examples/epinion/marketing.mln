@@ -1,0 +1,12 @@
+// Type Declaration
+
+// Predicate Declaration
+Buys(customer)
+Trusts(customer, customer)
+MarketTo(customer)
+
+0.6 Buys(x1) ^ Trusts(x2, x1) => Buys(x2)
+0.8 MarketTo(x) => Buys(x)
+
+-2:20 Buys(x)
+:-1 MarketTo(x)
