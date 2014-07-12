@@ -119,7 +119,33 @@
 \section{Text Normalization}
 
 \begin{frame}{}
-  Unknown words are really a problem for existing NLP-tools:
+  Twitter messages are different from newspaper articles and other
+  types of texts.
+  \begin{example}
+    ohja -- \#sadbrasilian RT @CorneliusBaier: Die beste \#BRAGER -
+    Geschichte \"uberhaupt:
+    http://mashable.com/2014/07/09/brazil-germany-world-cup-sweet-moment/...
+  \end{example}
+
+  \begin{example}
+    Eins zu 4500, auf diese Quote bezifferte US-Statistikexperte Nate
+    Silver die M\"oglichkeit, dass Deutschland sieben Tore
+    schie\ss{}t.  \end{example}
+\end{frame}
+
+\begin{frame}{}
+  Questions regarding Twitter specifics:
+  \begin{itemize}
+    \item What are the differences between tweets and standard language texts?
+    \item Do we need to do something against these differences?  And
+      what should we do, if yes?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{}
+  Differences between tweets and other text genres are primarily
+  caused by a high rate of unknown (out-of-vocabulary) words, and
+  these words really form a problem for existing NLP applications.
   \begin{example}
     \alert{Leg\_NN} den\_ART Karl\_NE weg\_PTKVZ ,\_\$,
     \alert{denn\_KON} kannste\_VVFIN immer\_ADV noch\_ADV hauen\_VVINF
@@ -129,7 +155,7 @@
 \end{frame}
 
 \begin{frame}{}
-  Possible solutions:
+  What can we do against unknown words?  Possible solutions are:
   \begin{itemize}
     \item<+-> adjust the tools (domain adaptation);
     \item<+->  adjust the text (text normalization).
@@ -177,9 +203,9 @@
 \end{frame}
 
 \begin{frame}{}
-  In order to measure how OOV-tokens were distributed among these classes, we
-  selected and analyzed all OOV-tokens with frequency higher than 1 and 1,000
-  randomly selected Hapax Legomena.
+  In order to measure how OOV-tokens were distributed among these
+  classes, we selected and analyzed all OOV-tokens with frequency
+  higher than 1 and also took 1,000 randomly selected hapax legomena.
 \end{frame}
 
 \begin{frame}{}
@@ -266,19 +292,6 @@
 
 \begin{frame}{}
   \footnotesize
-  As slang words we counted:\pause
-  \begin{itemize}
-    \item<+-> colloquial and dialectal expressions, e.g. \textit{n\"o},
-      \textit{bissl}
-    \item<+-> Expressions pertaining to the genre of Internet-based
-      communication, e.g.  \textit{LOL}, \textit{ava}
-    \item<+-> Spelling deviations that reflected colloquial pronunciation of
-      words, e.g. \textit{Tach}, \textit{nen}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{}
-  \footnotesize
   \begin{table}
     \caption{\footnotesize Intended (colloquial) vs. unintended (erroneous)
       ``spelling deviations''} \centering
@@ -289,8 +302,8 @@
       \multicolumn{2}{c}{\texttt{TreeTagger}}\\
       & \totaloov{} & \uniqoov{} & \totaloov{} & \uniqoov{}\\
       \noalign{\smallskip} \hline
-      Intended deviations & 8.06 & 5.09 & 5.97 & 3.7\\
-      Unintended deviations & 3.81 & 5.66 & 3.12 & 4.54\\\hline
+      Intended deviations, e.g. \textit{Tach}, \textit{nen} & 8.06 & 5.09 & 5.97 & 3.7\\
+      Unintended deviations, e.g. \textit{michte}, \textit{Geschhen} & 3.81 & 5.66 & 3.12 & 4.54\\\hline
       {\bfseries Total} & \totalHunspellSpellToken & \totalHunspellSpellType & %
       \totalTTaggerSpellToken & \totalTTaggerSpellType\\
       \noalign{\smallskip} \hline
@@ -348,29 +361,30 @@
 \end{frame}
 
 \begin{frame}{}
-  \normquestions{\alt<4->{\newline$\approx\frac{1}{10}$ of all tokens,
-      $\approx\frac{1}{4}$ of all token types need
-      normalization}{\newline$\approx\frac15$ of all tokens, $\approx\frac12$
-      of all types are unknown}}{\begin{itemize}
+  \normquestions{\newline\only<2->{$\approx\frac{1}{5} \cdot \frac{1}{2} = \frac{1}{10}$ of all
+      tokens, $\approx\frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$ of all token types need
+      normalization}}{\begin{itemize}
       \item<2-> \genrespecifics;
-      \item<3-> Deviating spellings;
+      \item<2-> Deviating spellings;
   \end{itemize}}{\begin{itemize}
-      \item<5-> \genrespecifics?\only<6->{ - rule-based}
-      \item<5-> Intended spelling deviations?
-      \item<5-> Unintended spelling deviations?
+      \item<3-> \genrespecifics?
+      \item<3-> Intended spelling deviations?
+      \item<3-> Unintended spelling deviations?
   \end{itemize}}{}
 \end{frame}
 
-\begin{frame}{Normalization of stylistic specifics of Twitter genre}
+
+\begin{frame}{}
   \begin{example}
     \textbf{@Merkel} soll f\"ur die n\"achsten 4 Jahre Kanzlerin
-    bleiben.\\ \textbf{\%User} soll f\"ur die n\"achsten 4 Jahre Kanzlerin
-    bleiben.
+    bleiben.\\ \only<2>{\textbf{\%User} soll f\"ur die n\"achsten 4 Jahre
+    Kanzlerin bleiben.}
   \end{example}
 
   \begin{example}
-    \textbf{@Merkel} Steinbr\"uck wirds sicherlich nicht gelingen in die zweite Runde zu kommen.\\
-    Steinbr\"uck wirds sicherlich nicht gelingen in die zweite Runde zu kommen.
+    \textbf{@Merkel} Steinbr\"uck wirds sicherlich nicht gelingen in
+    die zweite Runde zu kommen.\\ \only<2>{Steinbr\"uck wirds
+      sicherlich nicht gelingen in die zweite Runde zu kommen.}
   \end{example}
 \end{frame}
 
@@ -378,37 +392,39 @@
   \begin{example}
     Wenn ich mir die Wahlnacht so Revue passieren lasse, dann gefiel mir der
     Kommentar des stellv. Chefredakteurs im \textbf{fb.me/34N8K2KTw}\\
-    Wenn ich mir die Wahlnacht so Revue passieren lasse, dann gefiel mir der
-    Kommentar des stellv. Chefredakteurs im \textbf{\%Link}
+    \only<2>{Wenn ich mir die Wahlnacht so Revue passieren lasse, dann gefiel mir der
+    Kommentar des stellv. Chefredakteurs im \textbf{\%Link}}
   \end{example}
 
   \begin{example}
-    \textbf{\#}Schubs des Tages: Warum habe ich es verdient, glücklich zu sein? Deine
-    Antwort? \textbf{url9.de/JLc}\\
-    Schubs des Tages: Warum habe ich es verdient, glücklich zu sein? Deine
-    Antwort?
+    \textbf{\#}Schubs des Tages: Warum habe ich es verdient,
+    gl\"ucklich zu sein? Deine Antwort?
+    \textbf{url9.de/JLc}\\ \only<2>{Schubs des Tages: Warum habe ich
+      es verdient, gl\"ucklich zu sein? Deine Antwort?}
   \end{example}
 \end{frame}
 
 \begin{frame}{}
   \begin{example}
-    Heute vor 7 Jahren: \textbf{\#}Berlin Wuhlheide, blauer Himmel, 25 Grad... erstes
-    \textbf{\#}PearlJam Konzert inkl. Present Tense \textbf{:-D} legend\"ar! (mit
-    \textbf{@Vochlchen})\\
-    Heute vor 7 Jahren: Berlin Wuhlheide, blauer Himmel, 25 Grad... erstes
-    PearlJam Konzert inkl. Present Tense \textbf{\%PosSmiley} legend\"ar! (mit
-    \textbf{\%User})
+    Heute vor 7 Jahren: \textbf{\#}Berlin Wuhlheide, blauer Himmel, 25
+    Grad... erstes \textbf{\#}PearlJam Konzert inkl. Present Tense
+    \textbf{:-D} legend\"ar! (mit
+    \textbf{@Vochlchen})\\ \only<2>{Heute vor 7 Jahren: Berlin
+      Wuhlheide, blauer Himmel, 25 Grad... erstes PearlJam Konzert
+      inkl. Present Tense \textbf{\%PosSmiley} legend\"ar! (mit
+      \textbf{\%User})}
   \end{example}
 \end{frame}
 
-\begin{frame}{Normalization of intended spelling deviations}
+\begin{frame}{}
   \normquestions{\newline$\approx\frac{1}{10}$ of all tokens,
-    $\approx\frac{1}{4}$ of all types need normalization}{\begin{itemize}
+    $\approx\frac{1}{4}$ of all token types need
+    normalization}{\begin{itemize}
       \item \genrespecifics;
-      \item Spelling deviations;
+      \item Deviating spellings;
   \end{itemize}}{\begin{itemize}
-      \item \genrespecifics? - rule-based
-      \item Intended spelling deviations?\only<2->{ - rule-based}
+      \item \genrespecifics?\only<2->{ - rule-based}
+      \item Intended spelling deviations?
       \item Unintended spelling deviations?
   \end{itemize}}{}
 \end{frame}
@@ -433,6 +449,18 @@
     \textit{heraus-}, \textit{herum-} etc., e.g. \textit{rauszukriegen},
     \textit{rumbasteln}.
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Normalization of intended spelling deviations}
+  \normquestions{\newline$\approx\frac{1}{10}$ of all tokens,
+    $\approx\frac{1}{4}$ of all types need normalization}{\begin{itemize}
+      \item \genrespecifics;
+      \item Spelling deviations;
+  \end{itemize}}{\begin{itemize}
+      \item \genrespecifics? - rule-based
+      \item Intended spelling deviations?\only<2->{ - rule-based}
+      \item Unintended spelling deviations?
+  \end{itemize}}{}
 \end{frame}
 
 \begin{frame}{}
@@ -460,8 +488,7 @@
   \end{example}
 \end{frame}
 
-\section{Evaluation}
-\begin{frame}{Evaluation}
+\begin{frame}{}
   \normquestions{\newline$\approx\frac{1}{10}$ of all tokens,
     $\approx\frac{1}{4}$ of all types need normalization}{\begin{itemize}
       \item \genrespecifics;
@@ -469,10 +496,11 @@
   \end{itemize}}{\begin{itemize}
       \item \genrespecifics? - rule-based
       \item Intended spelling deviations? - rule-based
-      \item Unintended spelling deviations?- statistically/ML
+      \item Unintended spelling deviations? \only<2->{-
+        statistically/ML}
   \end{itemize}}{\begin{itemize}\pause
-      \item<+-> intrinsically (OOV-rate, precision, recall, F-measure)
-      \item<+-> extrinsically (Performance and quality of succeeding analysis modules)
+      \item<3-> intrinsically (OOV-rate, precision, recall, F-measure)
+      \item<4-> extrinsically (Performance and quality of succeeding analysis modules)
   \end{itemize}}
 \end{frame}
 
@@ -894,40 +922,6 @@ After normalization, PoS-Tagging accuracy improved by 6.41~\% from 80.56~\% to
   \end{itemize}
 \end{frame}
 
-\begin{frame}{}
-  \begin{table}
-    \tiny
-    \caption{\scriptsize Classification results for automatic sentiment
-      analysis (binary overlap; \alt<1>{linear chain}{tree-structured} CRFs).}
-    \centering
-    \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
-      \hline\noalign{\smallskip}
-      Classification Element & Precision & Recall & F-Measure\\\hline
-      \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
-      \alt<1>{
-        Sentiment & \alt<1>{99.23}{} & \alt<1>{86.27}{} & \alt<1>{92.29}{}\\
-        Source & \alt<1>{91.56}{} & \alt<1>{75.55}{} & \alt<1>{82.78}{}\\
-        Target & \alt<1>{95.99}{} & \alt<1>{75.69}{} & \alt<1>{84.64}{}\\
-      }{
-        Sentiment & \alt<1>{94.38}{} & \alt<1>{81.43}{} & \alt<1>{87.43}{}\\
-        Source & \alt<1>{92.31}{} & \alt<1>{48.54}{} & \alt<1>{63.62}{}\\
-        Target & \alt<1>{96.95}{} & \alt<1>{56.83}{} & \alt<1>{71.66}{}\\
-      }
-      \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
-      \alt<1>{
-        Sentiment & \alt<1>{25}{} & \alt<1>{16.04}{} & \alt<1>{19.55}{}\\
-        Source & \alt<1>{47.06}{} & \alt<1>{25}{} & \alt<1>{32.65}{}\\
-        Target & \alt<1>{31.51}{} & \alt<1>{18.11}{} & \alt<1>{23}{}\\
-      }{
-        Sentiment & \alt<1>{76.54}{} & \alt<1>{68.5}{} & \alt<1>{72.29}{}\\
-        Source & \alt<1>{25}{} & \alt<1>{18.75}{} & \alt<1>{21.43}{}\\
-        Target & \alt<1>{15.46}{} & \alt<1>{11.81}{} & \alt<1>{13.39}{}\\
-      }
-      \noalign{\smallskip} \hline
-    \end{tabular}
-  \end{table}
-\end{frame}
-
 \begin{frame}{Preliminary Conclusions and Perspectives}
   Conclusions:
   \begin{itemize}
@@ -940,6 +934,76 @@ After normalization, PoS-Tagging accuracy improved by 6.41~\% from 80.56~\% to
   \item Different classifiers (higher order CRFs, structural SVMs, etc.);
   \item Experiments with polarity dictionaries and ontologies;
   \end{itemize}
+\end{frame}
+
+\begin{frame}{}
+  \begin{table}
+    \tiny
+    \caption{\scriptsize Classification results for automatic sentiment
+      analysis (binary overlap; \alt<1>{linear chain}{tree-structured} CRFs).}
+    \centering
+    \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
+      \hline\noalign{\smallskip}
+      Classification Element & Precision & Recall & F-Measure\\\hline
+      \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
+      \alt<1>{
+        Sentiment & 98.73 & 95.84 & 97.26\\
+        Source & 94.71 & 94.3 & 94.51\\
+        Target & 97.22 & 94.87 & 96.03\\
+      }{
+        Sentiment & 41.68 & 73.12 & 53.1\\
+        Source & 44.13 & 67.54 & 53.38\\
+        Target & 29.46 & 74.67 & 42.25\\
+      }
+      \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
+      \alt<1>{
+        Sentiment & 34.24 & 18.81 & 24.28\\
+        Source & 27.78 & 10 & 14.71\\
+        Target & 24.5 & 20.75 & 22.47\\
+      }{
+        Sentiment & 24.86 & 27.46 & 26.09\\
+        Source & 19.78 & 18 & 18.85\\
+        Target & 18.24 & 30.26 & 22.76\\
+      }
+      \noalign{\smallskip} \hline
+    \end{tabular}
+  \end{table}
+  \pause
+\end{frame}
+
+\begin{frame}{}
+  \begin{table}
+    \tiny
+    \caption{\scriptsize Classification results for automatic sentiment
+      analysis (binary overlap; \alt<1>{linear chain}{tree-structured} CRFs).}
+    \centering
+    \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
+      \hline\noalign{\smallskip}
+      Classification Element & Precision & Recall & F-Measure\\\hline
+      \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
+      \alt<1>{
+        Sentiment & 98.22 & 97.75 & 97.98\\
+        Source & 94.87 & 97.37 & 96.1\\
+        Target & 97.55 & 95.88 & 96.71\\
+      }{
+        Sentiment & 55.82 & 77.15 & 64.78\\
+        Source & 57.38 & 75 & 65.02\\
+        Target & 31.2 & 73.67 & 43.83\\
+      }
+      \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
+      \alt<1>{
+        Sentiment & 64.3 & 48.14 & 55.06\\
+        Source & 51.72 & 30 & 37.97\\
+        Target & 32.26 & 32.28 & 32.27\\
+      }{
+        Sentiment & 47.02 &  49.49 & 48.23\\
+        Source & 29.27 & 24 & 26.37\\
+        Target & 19.74 & 32.28 & 24.5\\
+      }
+      \noalign{\smallskip} \hline
+    \end{tabular}
+  \end{table}
+  \pause
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
