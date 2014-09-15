@@ -311,6 +311,72 @@
       \begin{table}
         \tiny
         \caption{\scriptsize Klassifikationsergebnisse f\"ur automatische
+          Sentimentanalyse (bin\"are \"Uberlappung, Korpus I). \visible<2>{\alert{Sentiment ist ESE}}}  \centering
+        \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
+          \hline\noalign{\smallskip}
+          Element & Precision & Recall & F-Ma\ss\\\hline
+          \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
+          \alt<1>{
+            Sentiment & 99.23 & 86.27 & 92.29\\
+            Source & 91.56 & 75.55 & 82.78\\
+            Target & 95.99 & 75.69 & 84.64\\
+          }{
+            Sentiment & 94.38 & 81.43 & 87.43\\
+            Source & 92.31 & 48.54 & 63.62\\
+            Target & 96.95 & 56.83 & 71.66\\
+          }
+          \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
+          \alt<1>{
+            Sentiment & 25 & 16.04 & 19.55\\
+            Source & 47.06 & 25 & 32.65\\
+            Target & 31.51 & 18.11 & 23\\
+          }{
+            Sentiment & 76.54 & 68.5 & 72.29\\
+            Source & 25 & 18.75 & 21.43\\
+            Target & 15.46 & 11.81 & 13.39\\
+          }
+          \noalign{\smallskip} \hline
+        \end{tabular}
+      \end{table}
+    \end{frame}
+
+    \begin{frame}{\insertsubsection}
+      \begin{table}
+        \tiny
+        \caption{\scriptsize Klassifikationsergebnisse f\"ur automatische
+          Sentimentanalyse (proportionale \"Uberlappung, Korpus I). \visible<2>{\alert{Sentiment ist ESE}}}\centering
+        \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
+          \hline\noalign{\smallskip}
+          Element & Precision & Recall & F-Ma\ss\\\hline
+          \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
+          \alt<1>{
+            Sentiment & 97.62 & 84.94 & 90.84\\
+            Source & 90.4 & 73.71 & 81.21\\
+            Target & 93.55 & 74.02 & 82.65\\
+          }{
+            Sentiment & 93.62 & 80.5 & 86.57\\
+            Source & 92.07 & 48.26 & 63.33\\
+            Target & 94.39 & 55.58 & 69.96\\
+          }
+          \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
+          \alt<1>{
+            Sentiment & 21.31 & 14.53 & 17.28\\
+            Source & 40 & 25 & 30.77\\
+            Target & 26.06 & 13.75 & 18\\
+          }{
+            Sentiment & 74.38 & 67.27 & 70.65\\
+            Source & 22.22 & 18.75 & 20.34\\
+            Target & 12.16 & 10.56 & 11.3\\
+          }
+          \noalign{\smallskip} \hline
+        \end{tabular}
+      \end{table}
+    \end{frame}
+
+    \begin{frame}{\insertsubsection}
+      \begin{table}
+        \tiny
+        \caption{\scriptsize Klassifikationsergebnisse f\"ur automatische
           Sentimentanalyse (bin\"are \"Uberlappung, Korpus II). \visible<2>{\alert{Sentiment ist ESE}}}  \centering
         \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
           \hline\noalign{\smallskip}
@@ -345,72 +411,6 @@
         \tiny
         \caption{\scriptsize Klassifikationsergebnisse f\"ur automatische
           Sentimentanalyse (proportionale \"Uberlappung, Korpus II). \visible<2>{\alert{Sentiment ist ESE}}}\centering
-        \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
-          \hline\noalign{\smallskip}
-          Element & Precision & Recall & F-Ma\ss\\\hline
-          \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
-          \alt<1>{
-            Sentiment & 97.62 & 84.94 & 90.84\\
-            Source & 90.4 & 73.71 & 81.21\\
-            Target & 93.55 & 74.02 & 82.65\\
-          }{
-            Sentiment & 93.62 & 80.5 & 86.57\\
-            Source & 92.07 & 48.26 & 63.33\\
-            Target & 94.39 & 55.58 & 69.96\\
-          }
-          \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
-          \alt<1>{
-            Sentiment & 21.31 & 14.53 & 17.28\\
-            Source & 40 & 25 & 30.77\\
-            Target & 26.06 & 13.75 & 18\\
-          }{
-            Sentiment & 74.38 & 67.27 & 70.65\\
-            Source & 22.22 & 18.75 & 20.34\\
-            Target & 12.16 & 10.56 & 11.3\\
-          }
-          \noalign{\smallskip} \hline
-        \end{tabular}
-      \end{table}
-    \end{frame}
-
-    \begin{frame}{\insertsubsection}
-      \begin{table}
-        \tiny
-        \caption{\scriptsize Klassifikationsergebnisse f\"ur automatische
-          Sentimentanalyse (bin\"are \"Uberlappung). \visible<2>{\alert{Sentiment ist ESE}}}  \centering
-        \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
-          \hline\noalign{\smallskip}
-          Element & Precision & Recall & F-Ma\ss\\\hline
-          \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
-          \alt<1>{
-            Sentiment & 99.23 & 86.27 & 92.29\\
-            Source & 91.56 & 75.55 & 82.78\\
-            Target & 95.99 & 75.69 & 84.64\\
-          }{
-            Sentiment & 94.38 & 81.43 & 87.43\\
-            Source & 92.31 & 48.54 & 63.62\\
-            Target & 96.95 & 56.83 & 71.66\\
-          }
-          \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
-          \alt<1>{
-            Sentiment & 25 & 16.04 & 19.55\\
-            Source & 47.06 & 25 & 32.65\\
-            Target & 31.51 & 18.11 & 23\\
-          }{
-            Sentiment & 76.54 & 68.5 & 72.29\\
-            Source & 25 & 18.75 & 21.43\\
-            Target & 15.46 & 11.81 & 13.39\\
-          }
-          \noalign{\smallskip} \hline
-        \end{tabular}
-      \end{table}
-    \end{frame}
-
-    \begin{frame}{\insertsubsection}
-      \begin{table}
-        \tiny
-        \caption{\scriptsize Klassifikationsergebnisse f\"ur automatische
-          Sentimentanalyse (proportionale \"Uberlappung). \visible<2>{\alert{Sentiment ist ESE}}}\centering
         \begin{tabular}{p{0.25\textwidth}*{3}{>{\centering\arraybackslash}p{0.15\textwidth}}}
           \hline\noalign{\smallskip}
           Element & Precision & Recall & F-Ma\ss\\\hline
