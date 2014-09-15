@@ -2,7 +2,7 @@
 
 %%%% Packages
 \usepackage{amsmath, amsthm, amssymb}
-\usepackage[english]{babel}
+\usepackage[ngerman]{babel}
 \usepackage{array}              % for >{} in table column
 % specification
 \usepackage{color}              % for color definition
@@ -71,48 +71,26 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%% Sentiment Corpus
     \section{Sentiment Korpus}
-    \subsection{Auswahlkriterien}
+    \subsection{Korpusbeschreibung}
     \begin{frame}{\insertsubsection}
-      Zum Entwickeln und Testen unseres Sentimentsystems, wurde ein Korpus von
+      Zum Entwickeln und Testen unseres Sentimentsystems wurde ein Korpus von
       4995 Twitter-Nachrichten erstellt.  Dieses Korpus setzt sich zusammen
-      aus Tweets zu vier gro\ss{}en Themen (zwei politische und zwei nicht
-      politische), wobei f\"ur jedes Thema die Nachrichten nach jeweils drei
-      unterschiedlichen formellen Kriterien ausgew\"ahlt wurden.
-    \end{frame}
-
-    \begin{frame}{\insertsubsection}
-      Die ausgew\"ahlten Themen waren:
-      \begin{enumerate}
-      \item Politische:
-        \begin{itemize}
-        \item Tweets \"uber politische Akteure {\tiny(M\"arz 27 -- Mai 25,
-          2013)};
-        \item Tweets \"uber die Bundestagswahl 2013 {\tiny(Juni 15 --
-          September 30, 2013)};
-        \end{itemize}
-
-      \item Nicht politische:
-        \begin{itemize}
-        \item Allgemeine Tweets zu keinem bestimmten Thema {\tiny(M\"arz
-          31 -- April 30, 2013)};
-        \item Tweets zum Thema Papstwahl 2013 {\tiny(M\"arz 13 -- M\"arz 14,
-          2013)}.
-        \end{itemize}
-      \end{enumerate}
-    \end{frame}
-
-    \begin{frame}{\insertsubsection}
-      Formelle Kriterien waren:
-      \begin{enumerate}
-      \item Vorhandensein eines polaren Terms (SentiWS \cite{Remus-10});
-      \item Pr\"asenz von Emoticons und Ausrufezeichen;
-      \item Zuf\"allige Auswahl in restlichen Nachrichten.
-      \end{enumerate}
-      F\"ur jedes der obengenannten Kriterien wurden 333 Tweets f\"ur jedes
-      Thema ausgew\"ahlt.
+      aus Tweets zu vier verschiedenen Themen (zwei politischen -- politische
+      Diskussionen und Bundestagswahl 2013 -- und zwei nicht politischen --
+      allgemeine Diskussionen und Papstwahl 2013).
     \end{frame}
 
     \subsection{Annotationsschema}
+    \begin{frame}{\insertsubsection}
+      \begin{example}
+        \begin{math}
+        [[\text{Ich}]_{\text{\bfseries source}}
+          [\text{hasse}]_{\text{\bfseries emo-expression}}
+          [\text{Merkel}]_{\text{\bfseries target}}]_{\text{\bfseries sentiment}}\text{.}
+        \end{math}
+      \end{example}
+    \end{frame}
+
     \begin{frame}{\insertsubsection}
       \textbf{Emo-expressions} (\textit{expressive subjective elements}
       \cite{Wiebe-05}) - W\"orter und Wendungen mit polarem subjektiver
@@ -148,25 +126,23 @@
     \end{frame}
 
     \begin{frame}{\insertsubsection}
-      \begin{example}
-        \begin{math}
-        [[\text{Ich}]_{\text{\bfseries source}}
-          [\text{hasse}]_{\text{\bfseries emo-expression}}
-          [\text{Merkel}]_{\text{\bfseries target}}]_{\text{\bfseries sentiment}}\text{.}
-        \end{math}
-      \end{example}
+      Erstes Annotationsexperiment:
+      \begin{itemize}
+        \item Erstellung von Richtlinien;
+        \item Minimales Training.
+      \end{itemize}
     \end{frame}
 
     \subsection{$\kappa$-Agreement}
     \begin{frame}{\insertsubsection}
       \begin{table}
-        \caption{\scriptsize $\kappa$ Agreement f\"ur Sentiment-Korpus I.}
-        \centering
+        \caption{\footnotesize $\kappa$-Agreement f\"ur Sentiment-Korpus
+          I.}\centering
         \begin{tabular}{p{0.18\textwidth}*{5}{>{\centering\arraybackslash}p{0.13\textwidth}}}
           \hline\noalign{\smallskip}
           \multirow{2}{*}{Element} & %
           \multicolumn{2}{c}{\texttt{Politics}} & %
-          \multicolumn{2}{c}{\texttt{Non-politics}} & Gesamt\\
+          \multicolumn{2}{c}{\texttt{Non-politics}} & \multirow{2}{*}{Gesamt}\\
           & Politik & Wahlen & Allgemein & Papstwahl\\
           \noalign{\smallskip} \hline
           Sentiment & 0.35 & 0.35 & 0.38 & 0.45 & 0.39\\
@@ -181,16 +157,25 @@
       \end{table}
     \end{frame}
 
-    \subsection{$\kappa$-Agreement}
+    \begin{frame}{\insertsubsection}
+      Zweites Annotationsexperiment:
+      \begin{itemize}
+        \item Auffinden und Analyse der Unterschiede in der Annotation;
+        \item Aktualisieren der Richtlinien;
+        \item Erneutes Training;
+        \item Aufl\"osen der Differenzen durch Annotatoren.
+      \end{itemize}
+    \end{frame}
+
     \begin{frame}{\insertsubsection}
       \begin{table}
-        \caption{\scriptsize $\kappa$ Agreement f\"ur Sentiment-Korpus II.}
+        \caption{\footnotesize$\kappa$-Agreement f\"ur Sentiment-Korpus II.}
         \centering
         \begin{tabular}{p{0.15\textwidth}*{5}{>{\centering\arraybackslash}p{0.13\textwidth}}}
           \hline\noalign{\smallskip}
           \multirow{2}{*}{Element} & %
           \multicolumn{2}{c}{\texttt{Politics}} & %
-          \multicolumn{2}{c}{\texttt{Non-politics}} & Gesamt\\
+          \multicolumn{2}{c}{\texttt{Non-politics}} & \multirow{2}{*}{Gesamt}\\
           & Politik & Wahlen & Allgemein & Papstwahl\\
           \noalign{\smallskip} \hline
           Sentiment & 0.66 & 0.72 & 0.73 & 0.68 & 0.7\\
@@ -217,7 +202,7 @@
         \begin{tabular}{p{0.25\textwidth}*{4}{>{\centering\arraybackslash}p{0.15\textwidth}}}
           \hline\noalign{\smallskip}
           ML-System& Sentiment & Source & Target & Other\\\hline
-          SVM & 3.4 & 10.7 & 0 & 94.5\\
+          SVM & 3.4 & 10.7 & 9.1 & 94.5\\
           Bayes Net & 15.7 & 9.4 & 5.8 & 89\\
           NB & 15.9 & 7.5 & 8.9 & 78.4\\
           Multinomial NB & 17.5 & 9.8 & 11 & 85.6\\
@@ -283,27 +268,9 @@
       Evaluationsschemata:
       \begin{itemize}
         \scriptsize
-        \item Bin\"are \"Uberlappung \cite{Breck-07}:\\
-          \begin{math}\textstyle
-            \text{Precision} = \frac{|\left\{p| p \in P \wedge \exists
-              c \in C \text{ s.t. } f(c,p)\right\}|}{|P|}\text{; }
-            \text{Recall} = \frac{|\left\{c| c \in C \wedge \exists p
-              \in P \text{ s.t. } f(c,p)\right\}|}{|C|};
-          \end{math}\\
-          wo $C$ die Menge der richtigen Spannen ist, $P$ die Menge der
-          erkannten Spannen bedeutet, und $f(c, p)$ eine Funktion ist, die
-          ``true'' liefert, wenn die Spannen sich \"uberlapen, und sonst
-          ``false'' ausgibt;
-        \item Proportionale \"Uberlappung \cite{Johansson-10}:\\
-          \begin{math}\textstyle
-            \text{Precision} = \frac{\text{Score}(C, P)}{|P|}\text{;
-            }\text{Recall} = \frac{\text{Score}(P, C)}{|C|};
-          \end{math}\\
-          wo $\text{Score}(S, S') = \sum_{s \in S}\sum_{s' \in
-            S'}f(s, s')$ und $f(s, s') = \frac{|s \cap s'|}{|s'|}$;
-        \item Exaktes Matchen \cite{Breck-07}:\\ das Gleiche wie bin\"are
-          \"Uberlappung au\ss{}er dass $f(c, p)$ nur dann ``true'' liefert,
-          wenn verglichene Spannen in ihren Grenzen v\"ollig einig sind.
+        \item Bin\"are \"Uberlappung;
+        \item Proportionale \"Uberlappung;
+        \item Exaktes Matchen.
       \end{itemize}
     \end{frame}
 
@@ -383,23 +350,23 @@
           Element & Precision & Recall & F-Ma\ss\\\hline
           \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
           \alt<1>{
-            Sentiment & 99.23 & 86.27 & 92.29\\
-            Source & 91.56 & 75.55 & 82.78\\
-            Target & 95.99 & 75.69 & 84.64\\
+            Sentiment & 98.51 & 85.63 & 91.62\\
+            Source & 90.1 & 77.13 & 83.11\\
+            Target & 97.08 & 80.09 & 87.77\\
           }{
-            Sentiment & 94.38 & 81.43 & 87.43\\
-            Source & 92.31 & 48.54 & 63.62\\
-            Target & 96.95 & 56.83 & 71.66\\
-          }
+            Sentiment & 95.46 & 82.2 & 88.34\\
+            Source & 93.37 & 53.67 & 68.16\\
+            Target & 98.31 & 65.6 & 78.69\\
+        }
           \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
           \alt<1>{
-            Sentiment & 25 & 16.04 & 19.55\\
-            Source & 47.06 & 25 & 32.65\\
-            Target & 31.51 & 18.11 & 23\\
+            Sentiment & 27.84 & 19.03 & 22.61\\
+            Source & 31.25 & 31.25 & 31.25\\
+            Target & 22.73 & 20.47 & 21.54\\
           }{
-            Sentiment & 76.54 & 68.5 & 72.29\\
-            Source & 25 & 18.75 & 21.43\\
-            Target & 15.46 & 11.81 & 13.39\\
+            Sentiment & 72.26 & 69.23 & 70.71\\
+            Source & 21.21 & 21.88 & 21.54\\
+            Target & 14.89 & 17.32 & 16.02\\
           }
           \noalign{\smallskip} \hline
         \end{tabular}
@@ -416,23 +383,23 @@
           Element & Precision & Recall & F-Ma\ss\\\hline
           \multicolumn{4}{c}{\cellcolor{lightcyan4}Training Set}\\
           \alt<1>{
-            Sentiment & 97.62 & 84.94 & 90.84\\
-            Source & 90.4 & 73.71 & 81.21\\
-            Target & 93.55 & 74.02 & 82.65\\
+            Sentiment & 96.88 & 84.4 & 90.21\\
+            Source & 89.55 & 76.87 & 82.73\\
+            Target & 93.92 & 79.38 & 86.04\\
           }{
-            Sentiment & 93.62 & 80.5 & 86.57\\
-            Source & 92.07 & 48.26 & 63.33\\
-            Target & 94.39 & 55.58 & 69.96\\
+            Sentiment & 94.73 & 81.14 & 87.41\\
+            Source & 92.82 & 53.21 & 67.64\\
+            Target & 95.56 & 64.95 & 77.34\\
           }
           \hline\multicolumn{4}{c}{\cellcolor{lightcyan4}Test Set}\\
           \alt<1>{
-            Sentiment & 21.31 & 14.53 & 17.28\\
-            Source & 40 & 25 & 30.77\\
-            Target & 26.06 & 13.75 & 18\\
+            Sentiment & 24.81 & 16.59 & 19.89\\
+            Source & 31.25 & 31.25 & 31.25\\
+            Target & 17.81 & 17.99 & 17.9\\
           }{
-            Sentiment & 74.38 & 67.27 & 70.65\\
-            Source & 22.22 & 18.75 & 20.34\\
-            Target & 12.16 & 10.56 & 11.3\\
+            Sentiment & 69.36 & 67.87 & 68.61\\
+            Source & 21.21 & 21.88 & 21.54\\
+            Target & 11.85 & 15.41 & 13.4\\
           }
           \noalign{\smallskip} \hline
         \end{tabular}
@@ -445,25 +412,6 @@
         \includegraphics[width = 0.9\textwidth,height=170px]{img/lrn_curve.eps}
       \end{figure}
     \end{frame}
-
-    \section{Diskursanalyse des Twitter-Netzwerks}
-    \subsection{Korpus}
-    \begin{frame}{\insertsubsection}
-      \"Offentliche Diskurse zu allgemeinen und politischen Themen.
-    \end{frame}
-
-    \subsection{Annotationsschema und -Tools}
-    \begin{frame}{\insertsubsection}
-      Relationen:
-      \begin{itemize}
-        \item Inter-tweet Relationen;
-        \item Intra-tweet Relationen;
-      \end{itemize}
-
-      Tool:\\ Anpassung des RST-Tools von Daniel Marcu an das Format der
-      \"offentlichen Diskurse.
-    \end{frame}
-
     \section*{Bibliography}
     \bibliography{bibliography}
     \bibliographystyle{plain}
