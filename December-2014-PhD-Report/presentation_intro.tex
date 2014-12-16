@@ -1,0 +1,99 @@
+\documentclass{beamer}
+
+%%%% Packages
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage[ngerman]{babel}
+\usepackage{array}              % for >{} in table column
+% specification
+\usepackage{color}              % for color definition
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{multirow}           % for multirow
+\usepackage{multicol}           % for multiple columns
+\usepackage{tabularx}           % for centering in table
+\usepackage{tikz}               % for drawing diagrams
+\usetikzlibrary{arrows}
+
+%%%% Macros and Definitions
+\definecolor{firebrick4}{RGB}{139,026,026}
+\definecolor{gray57}{RGB}{145,145,145}
+\definecolor{gray71}{RGB}{181,181,181}
+\definecolor{gray84}{RGB}{212,212,212}
+\definecolor{lightcyan4}{RGB}{122,139,139}
+\definecolor{dodgerblue4}{RGB}{16,78,139}
+\definecolor{dodgerblue3}{RGB}{24,116,205}
+
+\newcommand{\indentpar}[1]{{\setlength{\parindent}{1cm} #1}}
+
+%%%% Presentation Setup
+\mode<presentation>
+    {
+      \usetheme{Ilmenau}
+      \usecolortheme{beaver}
+      \usefonttheme[onlylarge]{structuresmallcapsserif}
+    }
+    \setbeamercolor{title}{fg=dodgerblue4}
+    \setbeamercolor{frametitle}{fg=dodgerblue4}
+    \setbeamercolor*{palette secondary}{fg=dodgerblue4,bg=gray84}
+    \setbeamercolor*{palette tertiary}{fg=white,bg=dodgerblue4}
+    \setbeamercolor*{item}{fg=dodgerblue4}
+
+    \setbeamerfont{author}{size=\scriptsize}
+    \setbeamerfont{institute}{size=\scriptsize}
+    \setbeamerfont{date}{size=\tiny}
+    \setbeamerfont{normal text}{size=\scriptsize}
+
+    \beamertemplatenavigationsymbolsempty
+
+    %%%% Title
+    \title[DASoM Workshop 2014]{DASoM Workshop -- September 2014}
+    %% \author[Sidorenko]{Wladimir Sidorenko\\ \texttt{uladzimir.sidarenka{@}uni-potsdam.de}}
+    %% \institute[Uni Potsdam]{University of Potsdam}
+    \date{\today}
+
+    \pgfdeclareimage[interpolate=true,height=2.5cm]{logo}{img/uni_potsdam_logo.png}
+    \titlegraphic{\pgfuseimage{logo}}
+
+    %%%% Document
+    \begin{document}
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% Title Page
+    \begin{frame}{}
+      \titlepage
+    \end{frame}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%% Table of Contents
+    %% \begin{frame}{Inhaltsverzeichnis}
+    %%   \tableofcontents
+    %% \end{frame}
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{frame}{Agenda}
+      \begin{enumerate}
+        \item Status Projekt
+          \begin{itemize}
+          \item Gesamtprojekt (WI)
+          \item TP WI – M\"unster
+          \item TP KW2 – M\"unster
+          \item TP CL – Potsdam
+          \item TP KW1 – M\"unchen
+          \end{itemize}
+
+        \item Abstimmung zu Inhaltlichen Themen (AP 5B)
+          \begin{itemize}
+          \item Zeitchronologie EEG (KW1)
+          \item Operationalisierungstabelle (KW1)
+          \item Thematische Verbindung der Teilprojekte (Alle)
+          \end{itemize}
+
+        \item Organisatorisch (AP 5A)
+          \begin{itemize}
+          \item Planung des weiteren Projektverlaufs
+          \item Abschlussworkshop in M\"unster
+          \item Vorgehen beim Abschlussbericht
+          \item Anschlussprojekt (F\"orderungsm\"oglichkeiten, Ideen)
+          \end{itemize}
+      \end{enumerate}
+    \end{frame}
+    \end{document}
