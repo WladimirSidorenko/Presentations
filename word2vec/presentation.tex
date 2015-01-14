@@ -101,12 +101,14 @@
     \section{Questions}
     \begin{frame}{\insertsection}
       \begin{itemize}
-        \item What are word embeddings?
-        \item Why do we need them?
-        \item How do we obtain them?
+        \item What are neural word embeddings?
+        \item What do we need them for?
+        \item What are word meanings?
+        \item What would be the most natural representation for word meanings?
+        \item How do we obtain this ``most natural representation'' automatically?
         \item What is ``continuous bag of words''?
-        \item What is ``negative sampling''?
         \item What is ``subsampling''?
+        \item What is ``negative sampling''?
         \item What is ``hierarchical softmax''?
       \end{itemize}
     \end{frame}
@@ -115,6 +117,7 @@
     %%% Definition
     \section{Definition}
     \begin{frame}{\insertsubsection}
+      - What are word embeddings?
       \begin{definition}
         \textbf{Word embedding} is the collective name for a set of
         language modeling and feature learning techniques in natural
@@ -122,9 +125,11 @@
         to vectors of real numbers in a low dimensional space,
         relative to the vocabulary size.
       \end{definition}
-      \begin{center}
-        \large\raisebox{-1cm}{\includegraphics[height=2cm,width=2.5cm]{img/fox.jpg}} $\rightarrow \textrm{``fox''} \rightarrow [2.5, 4.7, 1.006, 0.75, ...]$
-      \end{center}
+      \visible<2->{
+        \begin{center}
+          \large\raisebox{-1cm}{\includegraphics[height=2cm,width=2.5cm]{img/fox.jpg}} $\rightarrow \textrm{``fox''} \rightarrow [2.5, 4.7, 1.006, 0.75, ...]$
+        \end{center}
+      }
     \end{frame}
 
 
@@ -132,25 +137,46 @@
     %%% Motivation
     \section{Motivation}
     \begin{frame}{\insertsection}
+      - What do we need the word embeddings for?
       \begin{example}
-        \alt<1,4->{I\_{\tiny SRC} like\_{\tiny SNT} this\_{\tiny NON} car\_{\tiny TRG}}{0\_{\tiny SRC} 178\_{\tiny SNT} 35\_{\tiny NON} 56\_{\tiny TRG}}
+        \alt<1,4->{I\_{\tiny SRC} like\_{\tiny SNT} this\_{\tiny NON} car\_{\tiny TRG}}{10\_{\tiny SRC} 178\_{\tiny SNT} 35\_{\tiny NON} 56\_{\tiny TRG}}
       \end{example}
 
       \begin{example}
-        \alt<1,4->{I\_{\tiny NON} drive\_{\tiny NON} this\_{\tiny NON} car\_{\tiny NON}}{0\_{\tiny NON} 208\_{\tiny NON} 35\_{\tiny NON} 56\_{\tiny NON}}
+        \alt<1,4->{I\_{\tiny NON} drive\_{\tiny NON} this\_{\tiny NON} car\_{\tiny NON}}{10\_{\tiny NON} 208\_{\tiny NON} 35\_{\tiny NON} 56\_{\tiny NON}}
       \end{example}
 
-      \only<3->{
+      \visible<3->{
       \begin{example}
-        \only<3>{0\_{\tiny ???} 193\_{\tiny ???} 35\_{\tiny ???} 56\_{\tiny ???}}
-        \only<4>{I\_{\tiny ???} love\_{\tiny ???} this\_{\tiny ???} car\_{\tiny ???}}
+        \only<3>{10\_{\tiny ???} 193\_{\tiny ???} 35\_{\tiny ???} 56\_{\tiny ???}}
+        \only<4->{I\_{\tiny ???} love\_{\tiny ???} this\_{\tiny ???} car\_{\tiny ???}}
       \end{example}
-}
+      }
     \end{frame}
 
     \begin{frame}{\insertsection}
-      What would be the best way to represent words and their meanings?
+      - What do we need word embeddings for?
 
+      - For efficient encoding of lexical information as features.
+    \end{frame}
+
+    \begin{frame}{Linguistic Digression}
+      - What are word meanings?
+
+      \begin{definition}
+        \textbf{Sememe} is the lexical meaning of a word or single morpheme,
+        that is commonly understood as a set of semes.\cite{Bussmann:02}
+      \end{definition}
+
+      \begin{definition}
+        \textbf{Seme} is the smallest unit of meaning recognized in semantics,
+        which usually describes one particular property of the pertaining
+        object.\cite{Wiki:Seme}
+      \end{definition}
+    \end{frame}
+
+    \begin{frame}{Linguistic Digression}
+      Sememes:\\
       \begin{center}
         \begin{tikzpicture}
           [auto=right,scale=0.6,
@@ -183,416 +209,284 @@
       \end{center}
     \end{frame}
 
-    \subsection{Model Change}
-    \begin{frame}
-      \frametitle{\insertsubsection}
-      \tiny
-      \vspace*{\fill}
+
+    \begin{frame}{Linguistic Digression}
+      Semes:
+
+      \begin{minipage}[t]{0.25\linewidth}
+        \raisebox{-1cm}{\includegraphics[height=1.5cm,width=2cm]{img/fox.jpg}}%
+      \end{minipage}%
+      \begin{minipage}[t]{0.70\linewidth}%
+        Fox - a small wild animal that is related to dogs and that has a long
+        pointed nose and a bushy tail.
+      \end{minipage}
+      \vfill
+      \begin{minipage}[t]{0.45\linewidth}\scriptsize
+        \begin{enumerate}
+        \item creature (1);
+        \item carnivorian (1);
+        \item mammal (1);
+        \item wild (0.9);
+        \item furred (1);
+        \item tailed (1);
+        \item red-colored (0.9);
+        \item four-legged (1);
+        \item \dots;%
+        \end{enumerate}%
+      \end{minipage}\hfill%
+      \begin{minipage}[t]{0.45\linewidth}%
+        \visible<2->{
+          \raisebox{-4cm}{\includegraphics[height=4cm,width=4cm]{img/meaning.png}}
+        }
+      \end{minipage}
+    \end{frame}
+
+    \begin{frame}{Linguistic Digression}
+      - What would be the best way to represent word meanings?
+
+      \visible<2->{- Real-valued coordinate vectors $\mathbb{R}^\mathrm{n}$}
+    \end{frame}
+
+    \begin{frame}{Linguistic Digression}
+      - How do we obtain this ``most natural representation'' automatically?
+
+      \textbf{First attempt}: counter models
+
+      \only<1>{
+        \begin{itemize}
+        \item counter vectors;
+        \item PMI vectors;
+        \item PPMI vectors;
+        \item factorized counter matrices.
+        \end{itemize}
+      }
+
+      \textbf{Basic assumption}: words that co-occur together
+        should share same or at least compatible semes.
+
+        \only<2->{
+          \begin{example}
+            The fox ate the hare.
+          \end{example}
+
+          \begin{example}
+            \alert{The car ate the hare.}
+          \end{example}
+        }
+
+      \only<3->{\textbf{Main conclusion}: word's co-occurrences already
+        are the respective semes of its meaning.}
+    \end{frame}
+
+    \begin{frame}{Linguistic Digression}
+      - How do we obtain this ``most natural representation'' automatically?
+
+      \textbf{Second attempt}: neural embeddings
+
+      \only<1>{
+        \begin{itemize}
+          \item \texttt{word2vec};
+          \item \texttt{GloVe}.
+        \end{itemize}
+      }
+
+      \textbf{Basic assumption}: words that co-occur together should share
+      same or compatible semes.
+
+      \only<3->{\textbf{Main conclusion}: a word has an inherent latent
+        semantic structure and this structure determines its co-occurrence
+        with other words.}
+    \end{frame}
+
+    \section{Implementation}
+    \begin{frame}{Neural Network Digression}
+      Neural networks:
+
       \begin{minipage}[t]{0.5\linewidth}
         \begin{center}
-          \tikzset{mynode1/.style={}}
-          \tikzset{mynode2/.style={}}
-          \tikzset{mynode3/.style={}}
-          \tikzset{mynode4/.style={}}
-          \tikzset{mynode5/.style={}}
-          \tikzset{mynode6/.style={}}
-          \tikzset{mynode7/.style={}}
-          \tikzset{mynode8/.style={}}
-          \only<4->{\tikzset{mynode1/.style={text=white,fill=dodgerblue4}}}
-          \only<5,9,11,12>{\tikzset{mynode2/.style={text=white,fill=dodgerblue4}}}
-          \only<6,9,11>{\tikzset{mynode3/.style={text=white,fill=dodgerblue4}}}
-          \only<7,9,11>{\tikzset{mynode4/.style={text=white,fill=dodgerblue4}}}
-          \only<8,9,11>{\tikzset{mynode5/.style={text=white,fill=dodgerblue4}}}
-          \only<10,11>{\tikzset{mynode6/.style={text=white,fill=dodgerblue4}}}
-          \only<12>{\tikzset{mynode7/.style={text=white,fill=dodgerblue4}}}
-          \only<10,11,12>{\tikzset{mynode8/.style={text=white,fill=dodgerblue4}}}
+          \vfill{}
+          %% \tikzset{mynode1/.style={}}
+          %% \tikzset{mynode2/.style={}}
+          %% \tikzset{mynode3/.style={}}
+          %% \tikzset{mynode4/.style={}}
+          %% \tikzset{mynode5/.style={}}
+          %% \tikzset{mynode6/.style={}}
+          %% \tikzset{mynode7/.style={}}
+          %% \tikzset{mynode8/.style={}}
+          %% \only<4->{\tikzset{mynode1/.style={text=white,fill=dodgerblue4}}}
+          %% \only<5,9,11,12>{\tikzset{mynode2/.style={text=white,fill=dodgerblue4}}}
+          %% \only<6,9,11>{\tikzset{mynode3/.style={text=white,fill=dodgerblue4}}}
+          %% \only<7,9,11>{\tikzset{mynode4/.style={text=white,fill=dodgerblue4}}}
+          %% \only<8,9,11>{\tikzset{mynode5/.style={text=white,fill=dodgerblue4}}}
+          %% \only<10,11>{\tikzset{mynode6/.style={text=white,fill=dodgerblue4}}}
+          %% \only<12>{\tikzset{mynode7/.style={text=white,fill=dodgerblue4}}}
+          %% \only<10,11,12>{\tikzset{mynode8/.style={text=white,fill=dodgerblue4}}}
 
-          \tikzset{myedge2/.style={color=white}}
-          \tikzset{myedge3/.style={color=white}}
-          \tikzset{myedge4/.style={color=white}}
-          \tikzset{myedge5/.style={color=white}}
-          \tikzset{myedge6/.style={color=white}}
-          \tikzset{myedge7/.style={color=white}}
-          \only<5,9,11,12>{\tikzset{myedge2/.style={color=black}}}
-          \only<6,9,11>{\tikzset{myedge3/.style={color=black}}}
-          \only<7,9,11>{\tikzset{myedge4/.style={color=black}}}
-          \only<8,9,11>{\tikzset{myedge5/.style={color=black}}}
-          \only<10,11>{\tikzset{myedge6/.style={color=black}}}
-          \only<12>{\tikzset{myedge7/.style={color=black}}}
-
+          %% \tikzset{myedge2/.style={color=white}}
+          %% \tikzset{myedge3/.style={color=white}}
+          %% \tikzset{myedge4/.style={color=white}}
+          %% \tikzset{myedge5/.style={color=white}}
+          %% \tikzset{myedge6/.style={color=white}}
+          %% \tikzset{myedge7/.style={color=white}}
+          %% \only<5,9,11,12>{\tikzset{myedge2/.style={color=black}}}
+          %% \only<6,9,11>{\tikzset{myedge3/.style={color=black}}}
+          %% \only<7,9,11>{\tikzset{myedge4/.style={color=black}}}
+          %% \only<8,9,11>{\tikzset{myedge5/.style={color=black}}}
+          %% \only<10,11>{\tikzset{myedge6/.style={color=black}}}
+          %% \only<12>{\tikzset{myedge7/.style={color=black}}}
           \begin{tikzpicture}
-            [auto=left,scale=0.6,
-              every node/.style={rectangle,draw,font=\tiny,fill=gray84,minimum size=15pt},
-              word/.style={draw=none,fill=none},
+            [auto=left,scale=0.6,->,
+              every node/.style={circle,draw,font=\tiny,fill=gray84,minimum size=15pt},
             ]
 
             \matrix (m) [matrix of math nodes,ampersand replacement=\&,fill=none,draw=none,rectangle,row sep=0.1cm,%
               column sep=0.8cm] {
-              \node[mynode5]{SRC}; \& \node{SRC}; \& \node[mynode6]{SRC}; \& \node{SRC};\\
-              \node[mynode4]{TRG}; \& \node{TRG}; \& \node[mynode6]{TRG}; \& \node{TRG};\\
-              \node[mynode3]{STM}; \& \node[mynode1]{STM}; \& \node[mynode8]{STM}; \& \node[mynode7]{STM};\\
-              \node[mynode2]{NON}; \& \node[mynode7]{NON}; \& \node[mynode8]{NON}; \& \node{NON};\\
-              \node[word]{Ich}; \& \node[word]{mag}; \& \node[word]{diesen}; \& \node[word]{Politiker};\\
+              \node[]{}; \& \node[]{};\\
+              \node[]{}; \& \node[]{};\\
+              \node[]{}; \& \node[]{};\\
+              \node[]{}; \& \node[]{};\\
             };
-            \draw[myedge2] (m-4-1) -- (m-3-2);
-            \draw[myedge3] (m-3-1) -- (m-3-2);
-            \draw[myedge4] (m-2-1) -- (m-3-2);
-            \draw[myedge5] (m-1-1) -- (m-3-2);
 
-            \draw[myedge6] (m-3-2) -- (m-4-3);
-            \draw[myedge6] (m-3-2) -- (m-3-3);
-            \draw[myedge6] (m-3-2) -- (m-2-3);
-            \draw[myedge6] (m-3-2) -- (m-1-3);
-
-            \draw[myedge7] (m-4-2) -- (m-3-3);
-            \draw[myedge7] (m-4-3) -- (m-3-4);
+            \foreach \from in {m-1-1,m-2-1,m-3-1,m-4-1}{
+              \foreach \to in {m-1-2,m-2-2,m-3-2,m-4-2} {
+                \draw (\from) -- (\to);
+              };
+            };
           \end{tikzpicture}
         \end{center}
+        \vfill{}
       \end{minipage}
       \begin{minipage}[t]{0.48\linewidth}
-        \begin{center}
-          \vspace*{\fill}
-          \only<1>{
-            \raggedright{\: Unnormalized probability of the tag sequence:}
-            \begin{equation}
-              \tilde{P}(X,Y) = exp\Big\{\sum_i{\Theta_{i} * f_{i}(x = X, y = Y)}\Big\}
-            \end{equation}
+        \scriptsize
+        \only<1>{
+          Are defined by:
+          \begin{itemize}
+          \item The number of layers: $L$;
+          \item The number of neurons for each layer $l$: $s_l$;
+          \item The transition matrices between the layers $l-1$ and $l$:
+            $\Theta^{l}_{l-1}$ ($s_{l-1} \times s_l$);
+          \item The activation functions $f_l$ which might be specific for
+            each layer $l$;
+          \item Finally, the cost function: $J_\Theta$.
+          \end{itemize}
+        }
 
-            \raggedright{\: Normalized probability of the tag sequence:}
-            \begin{equation}
-              P(Y|X) = \frac{\tilde{P}(X,Y)}{\sum_{Y}\tilde{P}(X,Y)}
-            \end{equation}
-            \pause
-          }
+        \only<2> {
+          Objectives of the training:
 
-          \only<2>{
-            \raggedright{\: Dataset:}
-            \begin{equation*}
-              \mathcal{D} = \{x[m],y[m]\}^M_{m=1}
-            \end{equation*}
+          Given a set of training instances ${(x_1, y_1), (x_2, y_2), \ldots,
+            (x_m, y_m)}$ (where $x \in \mathbb{R}^{s_0}$ and $y \in
+          \mathbb{R}^{K}$ so that $K$ is the number of classes), you should
+          minimize the cost function $J_\Theta$.\\[0.2cm]
+        }
 
-            \raggedright{\: Objective function:}
-            \begin{equation}
-              \begin{split}
-              \Theta & = \argmax_{\Theta}(\prod_{m=1}^M{P(y[m]|x[m])})\\
-              & = \argmax_{\Theta}(\sum_{m=1}^M{\ln(P(y[m]|x[m]))})
-              \end{split}
-            \end{equation}
-            \pause
-          }
+        \only<3> {
+          For this, we need to compute:
+          \begin{itemize}
+            \item The cost function:
+              $J_\Theta =
+            -\frac{1}{m}\Big[\sum_{i=1}^{m}\sum_{k=1}^{K}y_k^{(i)}log(h_\Theta(x^(i)_k)
+              + (1 - y_k^{(i)})log(h_\Theta(x^(i)_k)\Big]$
 
-          \only<3>{
-            \raggedright{\: Partial derivative of the objective function:}
-            \begin{equation}
-              \begin{split}
-              \frac{\partial \ell}{\partial \Theta_i} = & %
-              \sum_{m=1}^M\sum_{t=1}^T{f_i(y^{(m)}_t, y^{(m)}_{t-1}, x^{(m)})} \\ %
-              & - \sum_{m=1}^M\sum_{t=1}^T\sum_{y,y'}{f_i(y, y'|x^{(m)})} p(y,y'|x^{(m)})
-              \end{split}
-            \end{equation}
-          }
-
-          \only<11>{
-            \raggedright{\: Marginals of state features:}
-            \begin{equation*}
-                m_s[t][i] = \frac{\alpha[t][i] * \beta[t][i]}{Z}
-            \end{equation*}
-          }
-          \only<4,11>{
-            \begin{tikzpicture}
-              [auto=right,scale=0.6,
-                every node/.style={rectangle,draw=none,font=\tiny,fill=none,minimum size=15pt},
-                word/.style={draw=none,fill=none}]
-              \node[draw,align=center,text=white,fill=dodgerblue4] (n0) {STM};
-              \node (n1) [below left of=n0] {lemma=m\"ogen};
-              \node (n2) [below right of=n0] {form=mag};
-              \node (n3) [below of=n1] {sentiws=.345};
-              \node (n4) [below of=n2] {pos=VVFIN};
-              \foreach \from/\to in {n1/n0,n2/n0,n3/n0,n4/n0}
-              \draw (\from) -- (\to);
-            \end{tikzpicture}
-          }
-
-          \only<5>{
-            \begin{tikzpicture}
-              [auto=right,scale=0.6,
-                every node/.style={rectangle,draw=none,font=\tiny,fill=none,minimum size=15pt},
-                word/.style={draw=none,fill=none}]
-              \node[draw,align=center,text=white,fill=dodgerblue4] (n0) {STM};
-              \node (n1) [below left of=n0] {lemma=m\"ogen};
-              \node (n2) [below right of=n0] {form=mag};
-              \node (n3) [below of=n1] {sentiws=.345};
-              \node (n4) [below of=n2] {pos=VVFIN};
-              \node (n5) [left of=n0,draw,text=white,fill=dodgerblue4] {NON};
-              \foreach \from/\to in {n1/n0,n2/n0,n3/n0,n4/n0,n5/n0}
-              \draw (\from) -- (\to);
-            \end{tikzpicture}
-          }
-
-          \only<6>{
-            \begin{tikzpicture}
-              [auto=right,scale=0.6,
-                every node/.style={rectangle,draw=none,font=\tiny,fill=none,minimum size=15pt},
-                word/.style={draw=none,fill=none}]
-              \node[draw,align=center,text=white,fill=dodgerblue4] (n0) {STM};
-              \node (n1) [below left of=n0] {lemma=m\"ogen};
-              \node (n2) [below right of=n0] {form=mag};
-              \node (n3) [below of=n1] {sentiws=.345};
-              \node (n4) [below of=n2] {pos=VVFIN};
-              \node (n5) [left of=n0,draw,text=white,fill=dodgerblue4] {STM};
-              \foreach \from/\to in {n1/n0,n2/n0,n3/n0,n4/n0,n5/n0}
-              \draw (\from) -- (\to);
-            \end{tikzpicture}
-          }
-
-          \only<7>{
-            \begin{tikzpicture}
-              [auto=right,scale=0.6,
-                every node/.style={rectangle,draw=none,font=\tiny,fill=none,minimum size=15pt},
-                word/.style={draw=none,fill=none}]
-              \node[draw,align=center,text=white,fill=dodgerblue4] (n0) {STM};
-              \node (n1) [below left of=n0] {lemma=m\"ogen};
-              \node (n2) [below right of=n0] {form=mag};
-              \node (n3) [below of=n1] {sentiws=.345};
-              \node (n4) [below of=n2] {pos=VVFIN};
-              \node (n5) [left of=n0,draw,text=white,fill=dodgerblue4] {TRG};
-              \foreach \from/\to in {n1/n0,n2/n0,n3/n0,n4/n0,n5/n0}
-              \draw (\from) -- (\to);
-            \end{tikzpicture}
-          }
-
-          \only<8>{
-            \begin{tikzpicture}
-              [auto=right,scale=0.6,
-                every node/.style={rectangle,draw=none,font=\tiny,fill=none,minimum size=15pt},
-                word/.style={draw=none,fill=none}]
-              \node[draw,align=center,text=white,fill=dodgerblue4] (n0) {STM};
-              \node (n1) [below left of=n0] {lemma=m\"ogen};
-              \node (n2) [below right of=n0] {form=mag};
-              \node (n3) [below of=n1] {sentiws=.345};
-              \node (n4) [below of=n2] {pos=VVFIN};
-              \node (n5) [left of=n0,draw,text=white,fill=dodgerblue4] {SRC};
-              \foreach \from/\to in {n1/n0,n2/n0,n3/n0,n4/n0,n5/n0}
-              \draw (\from) -- (\to);
-            \end{tikzpicture}
-          }
-
-          \only<9,10>{
-            \raggedright{\: Computation of the alpha score:}
-            \begin{equation*}
-              \begin{split}
-              \alpha[t][j] = \sum_i{\alpha[t-1][i] * \Theta_{i,j}} * state[t][j]
-              \end{split}
-            \end{equation*}
-          }
-
-          \only<10>{
-            \raggedright{\: Computation of the beta score:}
-            \begin{equation*}
-              \begin{split}
-              \beta[t][i] = & \sum_j{\beta[t+1][j] * \Theta_{i,j}}
-              \end{split}
-            \end{equation*}
-          }
-
-          \only<12>{
-            \raggedright{\: Marginals of transition features:}
-            \begin{equation*}
-              \begin{split}
-                m_t[i][j] = \sum_{t=1}^{T-1}\frac{\alpha[t][i] *
-                  \Theta_{i,j} * \beta[t+1][j]  * state[t+1][j]}{Z}
-              \end{split}
-            \end{equation*}
-          }
-          \only<12>{
-            \begin{tikzpicture}
-              [auto=center,
-                every node/.style={rectangle,draw=none,font=\tiny,fill=none,minimum size=15pt},
-                word/.style={draw=none,fill=none}]
-              \node[draw,align=center,text=white,fill=dodgerblue4] (n0) {STM};
-              \node (n1) [left of=n0,draw,text=white,fill=dodgerblue4] {NON};
-              \draw (n0) -- (n1);
-            \end{tikzpicture}
-          }
-        \end{center}
+            \item Partial derivatives with respect to each parameter:
+              $\frac{\partial}{\partial \Theta^{(l)}_{ij}} J_\Theta =
+              x^{(l)}_i * \delta_j^{(l+1)}$, where $\delta^l = x^l - y$ if $l
+              := L$ and $\delta^l = (\Theta^{(l)})^T\delta^{(l + 1)} .*
+              f\prime(x^{(l)})$.
+          \end{itemize}
+        }
       \end{minipage}
       \vspace*{\fill}
     \end{frame}
 
-
     \begin{frame}
-      \frametitle{\insertsubsection}
-      \tiny
-      \vspace*{\fill}
+      \vfill \center At this point, you can lean back and relax.  Because you
+      already know almost everything about neural word embeddings, even if
+      some of you might not believe that.
+
+      \includegraphics[height=4cm,width=4cm]{img/relax.jpg}
+      \vfill
+    \end{frame}
+
+    \begin{frame}{Neural Network Digression}
+      Neural networks:
+
+      \begin{minipage}[t]{0.5\linewidth}
         \begin{center}
-          \tikzset{mynode1/.style={}}
-          \tikzset{mynode2/.style={}}
-          \tikzset{mynode3/.style={}}
-          \tikzset{mynode4/.style={}}
-          \tikzset{mynode5/.style={}}
-          \only<1->{\tikzset{mynode1/.style={text=white,fill=dodgerblue4}}}
-          \only<1>{\tikzset{mynode2/.style={text=white,fill=dodgerblue4}}}
-          \only<2->{\tikzset{mynode3/.style={text=white,fill=dodgerblue4}}}
+          \vfill{}
+          %% \tikzset{mynode1/.style={}}
+          %% \tikzset{mynode2/.style={}}
+          %% \tikzset{mynode3/.style={}}
+          %% \tikzset{mynode4/.style={}}
+          %% \tikzset{mynode5/.style={}}
+          %% \tikzset{mynode6/.style={}}
+          %% \tikzset{mynode7/.style={}}
+          %% \tikzset{mynode8/.style={}}
+          %% \only<4->{\tikzset{mynode1/.style={text=white,fill=dodgerblue4}}}
+          %% \only<5,9,11,12>{\tikzset{mynode2/.style={text=white,fill=dodgerblue4}}}
+          %% \only<6,9,11>{\tikzset{mynode3/.style={text=white,fill=dodgerblue4}}}
+          %% \only<7,9,11>{\tikzset{mynode4/.style={text=white,fill=dodgerblue4}}}
+          %% \only<8,9,11>{\tikzset{mynode5/.style={text=white,fill=dodgerblue4}}}
+          %% \only<10,11>{\tikzset{mynode6/.style={text=white,fill=dodgerblue4}}}
+          %% \only<12>{\tikzset{mynode7/.style={text=white,fill=dodgerblue4}}}
+          %% \only<10,11,12>{\tikzset{mynode8/.style={text=white,fill=dodgerblue4}}}
 
-          \tikzset{myedge1/.style={color=white}}
-          \tikzset{myedge2/.style={color=white}}
-          \tikzset{myedge3/.style={color=white}}
-          \only<1>{\tikzset{myedge1/.style={color=black}}}
-          \only<1->{\tikzset{myedge2/.style={color=black}}}
-          \only<2->{\tikzset{myedge3/.style={color=black}}}
-
+          %% \tikzset{myedge2/.style={color=white}}
+          %% \tikzset{myedge3/.style={color=white}}
+          %% \tikzset{myedge4/.style={color=white}}
+          %% \tikzset{myedge5/.style={color=white}}
+          %% \tikzset{myedge6/.style={color=white}}
+          %% \tikzset{myedge7/.style={color=white}}
+          %% \only<5,9,11,12>{\tikzset{myedge2/.style={color=black}}}
+          %% \only<6,9,11>{\tikzset{myedge3/.style={color=black}}}
+          %% \only<7,9,11>{\tikzset{myedge4/.style={color=black}}}
+          %% \only<8,9,11>{\tikzset{myedge5/.style={color=black}}}
+          %% \only<10,11>{\tikzset{myedge6/.style={color=black}}}
+          %% \only<12>{\tikzset{myedge7/.style={color=black}}}
           \begin{tikzpicture}
-            [auto=left,scale=0.6,
-              every node/.style={rectangle,draw,font=\tiny,fill=gray84},
-              word/.style={draw=none,fill=none},
+            [auto=left,scale=0.6,->,
+              every node/.style={circle,draw,font=\tiny,fill=gray84,minimum size=15pt},
             ]
 
-            \matrix (m) [matrix of math nodes,ampersand replacement=\&,fill=none,draw=none,rectangle,row sep=0.8cm,%
-              column sep=0.1cm] {
-              \& \& \& \node[mynode3]{SRC}; \& \node[mynode3]{TRG}; \& \node[mynode1,label=below:{mag}]{STM}; \& \node[mynode3]{NON};%
-              \& \& \& \\
-              \node[mynode2,label=above:Ich]{SRC}; \& \node[mynode2]{TRG}; \& \node[mynode2]{STM}; \&
-              \node[mynode2]{NON}; \& \& \& \node[mynode2]{SRC}; \& \node[mynode1]{TRG}; \& \node[mynode2]{STM}; \&
-              \node[mynode2,label=above:Politiker]{NON}; \\
+            \matrix (m) [matrix of math nodes,ampersand replacement=\&,fill=none,draw=none,rectangle,row sep=0.1cm,%
+              column sep=0.8cm] {
+              \node[]{}; \& \node[]{};\\
+              \node[]{}; \& \node[]{};\\
+              \node[]{}; \& \node[]{};\\
+              \node[]{}; \& \node[]{};\\
             };
 
-            \draw[myedge1] (m-2-1) -- (m-1-6);
-            \draw[myedge1] (m-2-2) -- (m-1-6);
-            \draw[myedge1] (m-2-3) -- (m-1-6);
-            \draw[myedge1] (m-2-4) -- (m-1-6);
-
-            \draw[myedge1] (m-2-7) -- (m-1-6);
-            \draw[myedge2] (m-2-8) -- (m-1-6);
-            \draw[myedge1] (m-2-9) -- (m-1-6);
-            \draw[myedge1] (m-2-10) -- (m-1-6);
-
-            \draw[myedge3] (m-1-4) -- (m-2-8);
-            \draw[myedge3] (m-1-5) -- (m-2-8);
-            \draw[myedge3] (m-1-7) -- (m-2-8);
+            \foreach \from in {m-1-1,m-2-1,m-3-1,m-4-1}{
+              \foreach \to in {m-1-2,m-2-2,m-3-2,m-4-2} {
+                \draw (\from) -- (\to);
+              };
+            };
           \end{tikzpicture}
-
-          \vspace*{\fill}
-          \only<1,2>{
-            \raggedright{\: Computation of the alpha score:}
-            \begin{equation*}
-              \alpha[p][j] = \prod_{c \in children}{\sum_i{\alpha[c][i] * \Theta_{i,j}}} * state[p][j]
-            \end{equation*}
-          }
-
-          \only<2>{
-            \raggedright{\: Computation of the beta score:}
-            \begin{equation*}
-              \beta[c][i] = \sum_j{\beta[p][j] * \Theta_{i,j} *
-                \frac{\alpha[p][j]}{\sum_l{\alpha[c][l] * \Theta[l][j]}}}
-            \end{equation*}
-          }
-
-          \only<3->{
-            \raggedright{\: Marginals of state features:}
-            \begin{equation*}
-                m_s[t][i] = \frac{\alpha[t][i] * \beta[t][i]}{Z}
-            \end{equation*}
-          }
-
-          \only<4>{
-            \raggedright{\: Marginals of transition features:}
-            \begin{equation*}
-                m_s[t][i] = \frac{\alpha[c][i] * edge[i][j] * \beta[p][j] * \frac{\alpha[p][j]}{\alpha[c][l] * \Theta[l][j]}}{Z}
-            \end{equation*}
-          }
         \end{center}
-      \vspace*{\fill}
-    \end{frame}
+        \vfill{}
+      \end{minipage}
+      \begin{minipage}[t]{0.48\linewidth}
+        \scriptsize
 
-    \begin{frame}
-      \frametitle{\insertsubsection}
-      Higher-order linear-chain CRF.
-      \vspace*{\fill}
-      \begin{center}
-        \begin{tikzpicture}
-          [auto=left,scale=0.6,
-            every node/.style={rectangle,draw,font=\tiny,fill=gray84},
-            word/.style={draw=none,fill=none},
-          ]
-
-          \matrix (m) [matrix of math nodes,ampersand replacement=\&,fill=none,draw=none,rectangle,row sep=0.1cm,%
-            column sep=0.8cm] {
-            \node{\dots}; \& \node{\dots}; \& \node{\dots}; \& \node{\dots};\\
-            \node{NON|SRC}; \& \node{NON|SRC}; \& \node{NON|SRC}; \& \node{NON|SRC};\\
-            \node{SRC|NON}; \& \node{SRC|NON}; \& \node{SRC|NON}; \& \node{SRC|NON};\\
-            \node{TRG|NON}; \& \node{TRG|NON}; \& \node{TRG|NON}; \& \node{TRG|NON};\\
-            \node{STM|NON}; \& \node{STM|NON}; \& \node{STM|NON}; \& \node{STM|NON};\\
-            \node{NON|NON}; \& \node{NON|NON}; \& \node{NON|NON}; \& \node{NON|NON};\\
-            \node{SRC}; \& \node{SRC}; \& \node{SRC}; \& \node{SRC};\\
-            \node{TRG}; \& \node{TRG}; \& \node{TRG}; \& \node{TRG};\\
-            \node{STM}; \& \node{STM}; \& \node{STM}; \& \node{STM};\\
-            \node{NON}; \& \node{NON}; \& \node{NON}; \& \node{NON};\\
-            \node[word]{Ich}; \& \node[word]{mag}; \& \node[word]{diesen}; \& \node[word]{Politiker};\\
-          };
-        \end{tikzpicture}
-      \end{center}
-    \end{frame}
-
-    \begin{frame}
-      \frametitle{\insertsubsection}
-      Higher-order semi-markov CRF \cite{Nguyen-14}.
-      \vspace*{\fill}
-      \begin{center}
-        \tikzset{}
-      \begin{tikzpicture}
-          [auto=left,scale=0.6,
-            every node/.style={rectangle,draw,font=\tiny,fill=gray84},
-            word/.style={draw=none,fill=none},
-            element2/.style={rectangle,top color=blue!20!white!20,bottom color=dodgerblue4,font=\tiny}
-          ]
-
-          \matrix (m) [matrix of math nodes,ampersand replacement=\&,fill=none,draw=none,rectangle,row sep=0.1cm,%
-            column sep=0.8cm] {
-            \node{\dots}; \& \node{\dots}; \& \node{\dots}; \& \node{\dots};\\
-            \node{NON|SRC}; \& \node{NON|SRC}; \& \node{NON|SRC}; \& \node{NON|SRC};\\
-            \node{SRC|NON}; \& \node{SRC|NON}; \& \node{SRC|NON}; \& \node{SRC|NON};\\
-            \node{TRG|NON}; \& \node{TRG|NON}; \& \node{TRG|NON}; \& \node{TRG|NON};\\
-            \node{STM|NON}; \& \node{STM|NON}; \& \node{STM|NON}; \& \node{STM|NON};\\
-            \node{SRC}; \& \node{SRC}; \& \node{SRC}; \& \node{SRC};\\
-            \node{TRG}; \& \node{TRG}; \& \node{TRG}; \& \node{TRG};\\
-            \node{STM}; \& \node{STM}; \& \node{STM}; \& \node{STM};\\
-            \node{NON}; \& \node{NON}; \& \node{NON}; \& \node{NON};\\
-            \node[word]{Ich}; \& \node[word]{mag}; \& \node[word]{diesen}; \& \node[word]{Politiker};\\
-          };
-          \node[fit=(m-7-4)(m-7-4),element2,label={center:TRG}]{};
-        \end{tikzpicture}
-      \end{center}
-    \end{frame}
-
-    \begin{frame}
-      \frametitle{\insertsubsection}
-      Higher-order semi-markov CRF.
-      \vspace*{\fill}
-      \begin{center}
-        \tikzset{}
-      \begin{tikzpicture}
-          [auto=left,scale=0.6,
-            every node/.style={rectangle,draw,font=\tiny,fill=gray84},
-            word/.style={draw=none,fill=none},
-            element2/.style={rectangle,top color=blue!20!white!20,bottom color=dodgerblue4,font=\tiny}
-          ]
-
-          \matrix (m) [matrix of math nodes,ampersand replacement=\&,fill=none,draw=none,rectangle,row sep=0.1cm,%
-            column sep=0.8cm] {
-            \node{\dots}; \& \node{\dots}; \& \node{\dots}; \& \node{\dots};\\
-            \node{NON|SRC}; \& \node{NON|SRC}; \& \node{NON|SRC}; \& \node{NON|SRC};\\
-            \node{SRC|NON}; \& \node{SRC|NON}; \& \node{SRC|NON}; \& \node{SRC|NON};\\
-            \node{TRG|NON}; \& \node{TRG|NON}; \& \node{TRG|NON}; \& \node{TRG|NON};\\
-            \node{STM|NON}; \& \node{STM|NON}; \& \node{STM|NON}; \& \node{STM|NON};\\
-            \node{SRC}; \& \node{SRC}; \& \node{SRC}; \& \node{SRC};\\
-            \node{TRG}; \& \node{TRG}; \& \node{TRG}; \& \node{TRG};\\
-            \node{STM}; \& \node{STM}; \& \node{STM}; \& \node{STM};\\
-            \node{NON}; \& \node{NON}; \& \node{NON}; \& \node{NON};\\
-            \node[word]{Ich}; \& \node[word]{mag}; \& \node[word]{diesen}; \& \node[word]{Politiker};\\
-          };
-          \node[fit=(m-7-3)(m-7-4),element2,label={center:TRG}]{};
-        \end{tikzpicture}
-      \end{center}
+        As you might remember, neural networks are defined by the following
+        components:
+        \begin{itemize}
+        \item The number of layers: $L$\visible<2->{$= 2$ (the input word and
+          the co-occurrence word)};
+        \item The number of neurons for each layer $l$: $s_l$ \visible<2->{is
+          the same for both layers; it is set manually through a parameter and
+          roughly corresponds to the dimensionality of the vector space (or
+          the number of semes that you want to encode)};
+        \item The transition matrices between the layers $l-1$ and $l$:
+          $\Theta^{l}_{l-1}$ ($s_{l-1} \times s_l$) \visible<2->{well, they
+          don't exist explicitly in \texttt{word2vec} or we could say that it
+          is equal to trhe identity matrix $I$};
+        \item The activation functions $f_l$ which might be specific for each
+          layer $l$ \visible<2->{yeap, at the output layer you have the
+            softmax};
+        \item Finally, the cost function: $J_\Theta$.
+        \end{itemize}
+      \end{minipage}
     \end{frame}
 
     \section*{Bibliography}
